@@ -22,4 +22,18 @@ export class BookStore {
             throw new Error (`Can't get books. ${error}`);
         }
     }
+
+    async show(id: string) :Promise<Book> {
+            try {
+                const sql = 'SELECT * FROM books WHERE id=($1)';
+                const conn = await client.connect();
+                const result = await conn.query(sql,[id]);
+                conn.release();
+                return result.rows[0];
+            } catch (error) {
+            throw new Error (`Can't get books. ${error}`);   
+            }
+    }
+
+    
 }
