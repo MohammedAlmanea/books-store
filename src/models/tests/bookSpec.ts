@@ -42,4 +42,10 @@ describe('BookStore model', () => {
       summary: 'Childrens',
     });
   });
+
+  it('delete method should delete the correct book', async () => {
+    store.delete('1');
+    const result = await store.index()
+    expect(result).toEqual([]);
+  })
 });
