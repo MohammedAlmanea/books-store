@@ -1,10 +1,10 @@
 import client from '../database';
 
 export type Book = {
-  id: number;
+  id?: number;
   title: string;
   author: string;
-  totalPages: number;
+  total_pages: number;
   summary: string;
 };
 
@@ -37,14 +37,14 @@ export class BookStore {
   async create(b: Book): Promise<Book> {
     try {
       const sql =
-        'INSERT INTO books (title, author, total_pages, summary) VALUES($1, $2, $3, $4) RETURNING *';
+        'INSERT INTO books (title, total_pages, author, summary) VALUES($1, $2, $3, $4) RETURNING *';
 
       const conn = await client.connect();
 
       const result = await conn.query(sql, [
         b.title,
+        b.total_pages,
         b.author,
-        b.totalPages,
         b.summary,
       ]);
 
