@@ -3,5 +3,5 @@ CREATE TABLE users (
     first_name VARCHAR(255), 
     last_name VARCHAR(255),
     user_name VARCHAR(255),
-    password integer
+    password VARCHAR
     );
