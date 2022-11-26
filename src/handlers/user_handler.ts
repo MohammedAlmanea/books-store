@@ -3,6 +3,16 @@ import { UserTable, User } from '../models/user';
 
 const Table = new UserTable();
 
+const index = async (_req: Request, res: Response) => {
+  const users = await Table.index();
+  res.json(users);
+};
+
+const show = async (_req: Request, res: Response) => {
+  const user = await Table.show(_req.params.id);
+  res.json(user);
+};
+
 const create = async (_req: Request, res: Response) => {
   try {
     const user: User = {
@@ -19,6 +29,12 @@ const create = async (_req: Request, res: Response) => {
     res.json(err);
   }
 };
+
+const destroy = async (_req: Request, res: Response) => {
+  const deleted = await Table.delete(_req.params.id);
+  res.json(deleted);
+};
+
 const authenticate = async (_req: Request, res: Response) => {
   try {
     const username = _req.body.user_name;
@@ -34,7 +50,10 @@ const authenticate = async (_req: Request, res: Response) => {
 
 const userRoutes = (app: express.Application) => {
   app.post('/users', create);
-  app.get('/users', authenticate);
+  app.post('/users/authenticate', authenticate);
+  app.get('/users', index);
+  app.get('/users/:id', show);
+  app.delete('/users', destroy);
 };
 
 export default userRoutes;
