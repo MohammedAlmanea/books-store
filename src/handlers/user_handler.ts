@@ -33,8 +33,8 @@ const authenticate = async (_req: Request, res: Response) => {
 };
 
 const userRoutes = (app: express.Application) => {
-  app.post('/books', create);
-  app.get('/books', authenticate);
+  app.post('/users', create);
+  app.get('/users', authenticate);
 };
 
 export default userRoutes;
