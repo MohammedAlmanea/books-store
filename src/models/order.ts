@@ -39,10 +39,7 @@ export class Order_Class {
 
       const conn = await client.connect();
 
-      const result = await conn.query(sql, [
-       or.status,
-       or.user_id
-      ]);
+      const result = await conn.query(sql, [or.status, or.user_id]);
 
       const order = result.rows[0];
 
@@ -69,6 +66,29 @@ export class Order_Class {
       return order;
     } catch (err) {
       throw new Error(`Could not delete order ${id}. Error: ${err}`);
+    }
+  }
+
+  // FOR order_products joint table
+
+  async addProduct(
+    quantity: number,
+    order_id: string,
+    productId: string
+  ): Promise<Order> {
+    try {
+      const sql =
+        'INSERT INTO order_products(quantity, order_id, product_id) VALUES ($1,$2,$3) RETURNING *';
+      const conn = await client.connect();
+
+      const result = await conn.query(sql, [quantity, order_id, productId]);
+      const order = result.rows[0];
+      conn.release();
+      return order;
+    } catch (error) {
+      throw new Error(
+        `Can't add product ${productId} to order ${order_id}!: ${error}`
+      );
     }
   }
 }

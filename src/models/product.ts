@@ -39,10 +39,7 @@ export class Product_Class {
 
       const conn = await client.connect();
 
-      const result = await conn.query(sql, [
-        p.name,
-        p.price
-      ]);
+      const result = await conn.query(sql, [p.name, p.price]);
 
       const product = result.rows[0];
 
