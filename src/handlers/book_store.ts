@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Book, BookStore } from '../models/book';
+import jwt from 'jsonwebtoken';
 
 const store = new BookStore();
 
@@ -45,11 +46,23 @@ const destroy = async (req: Request, res: Response) => {
   res.json(deleted);
 };
 
+const verifyAuthToken = (req: Request, res: Response,next) => {
+  try {
+  const authorizationHeader = req.headers.authorization;
+  const token = authorizationHeader?.split(' ')[1];
+  const decoded = jwt.verify(token as string, process.env.TOKEN as string);
+
+  next()
+  } catch (error) {
+    res.status(401);
+  }
+}
+
 const bookRoutes = (app: express.Application) => {
   app.get('/books', index);
   app.get('/books/:id', show);
-  app.post('/books', create);
-  app.delete('/books/:id', destroy);
+  app.post('/books', verifyAuthToken ,create);
+  app.delete('/books/:id', verifyAuthToken ,destroy);
 };
 
 export default bookRoutes;

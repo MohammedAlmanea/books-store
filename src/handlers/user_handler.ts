@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import { UserTable, User } from '../models/user';
+import jwt from 'jsonwebtoken';
+
 
 const Table = new UserTable();
 
@@ -23,7 +25,8 @@ const create = async (_req: Request, res: Response) => {
     };
 
     const newUser = await Table.create(user);
-    res.json(newUser);
+    var token = jwt.sign(newUser ,process.env.TOKEN as string)
+    res.json(token);
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -41,9 +44,10 @@ const authenticate = async (_req: Request, res: Response) => {
     const password = _req.body.password;
 
     const auth = await Table.authenticate(username, password);
-    res.json(auth);
+    var token = jwt.sign({auth} ,process.env.TOKEN as string)
+    res.json(token);
   } catch (err) {
-    res.status(400);
+    res.status(401);
     res.json(err);
   }
 };
