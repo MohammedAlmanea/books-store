@@ -5,8 +5,8 @@ const ProductObj = new Product_Class();
 
 const index = async (_req: Request, res: Response) => {
   try {
-    const orders = await ProductObj.index();
-    res.json(orders);
+    const product = await ProductObj.index();
+    res.json(product);
   } catch (error) {
     res.status(400);
     res.json(error);
@@ -15,8 +15,8 @@ const index = async (_req: Request, res: Response) => {
 
 const show = async (req: Request, res: Response) => {
   try {
-    const book = await ProductObj.show(req.params.id);
-    res.json(book);
+    const product = await ProductObj.show(req.params.id);
+    res.json(product);
   } catch (error) {
     res.status(400);
     res.json(error);
