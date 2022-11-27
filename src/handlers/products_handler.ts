@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { Product, Product_Class} from '../models/product';
+import { Product, Product_Class } from '../models/product';
 
 const ProductObj = new Product_Class();
 
@@ -27,7 +27,7 @@ const create = async (req: Request, res: Response) => {
   try {
     const product: Product = {
       name: req.body.name,
-      price: req.body.price
+      price: req.body.price,
     };
 
     const newProduct = await ProductObj.create(product);
