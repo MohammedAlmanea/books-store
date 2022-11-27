@@ -77,6 +77,20 @@ export class Order_Class {
     productId: string
   ): Promise<Order> {
     try {
+      const ordersql = 'SELECT * FROM orders WHERE id=($1)';
+      const conn = await client.connect();
+      const result = await conn.query(ordersql, [order_id]);
+      const order = result.rows[0];
+      if (order.status !== 'open') {
+        throw new Error(
+          `Can't add product ${productId} to order ${order_id} because the order is ${order.status}!`
+        );
+      }
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
+
+    try {
       const sql =
         'INSERT INTO order_products(quantity, order_id, product_id) VALUES ($1,$2,$3) RETURNING *';
       const conn = await client.connect();
